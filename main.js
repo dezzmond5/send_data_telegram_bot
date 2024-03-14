@@ -22,7 +22,7 @@ const botToken = process.env.TELEGRAM_TOKEN;
 // const chatId = '319872388';
 // 694984992
 
-const ids = ['319872388']
+const ids = ['694984992', '319872388']
 
 const telegramApiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
