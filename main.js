@@ -2,6 +2,10 @@ import express from 'express';
 import fetch from 'node-fetch';
 import cors from 'cors'
 
+import dotenv from 'dotenv';
+dotenv.config();
+
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -11,34 +15,37 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors())
 
 // URL-адреса сервера Telegram Bot API
-const botToken = '7185321685:AAFe_vIWeRI5mJsJeaLg4nAsISnGD1R-fR8';
-const chatId = '319872388';
+const botToken = process.env.TELEGRAM_TOKEN;
+
+// const chatId = '319872388';
+
+const ids = ['694984992', '319872388']
+
 const telegramApiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
-// Обробник POST-запитів на відправку даних з форми
-// Обробник POST-запитів на відправку даних з форми
 app.post('/submit-form', async (req, res) => {
     try {
-        // Отримати дані з форми
-        const { email, message, phone } = req.body;
+        // Получить данные из формы
+        const { name, message, phone } = req.body;
 
-        // Створити повідомлення для відправлення в Telegram
-        const telegramMessage = `Email: ${email}\nPhone number: ${phone}\nMessage: ${message}`;
+        // Создать сообщение для отправки в Telegram
+        const telegramMessage = `Name: ${name}\nPhone number: ${phone}\nMessage: ${message}`;
 
-        // Відправити повідомлення в бота Telegram (без ID чату)
-        await sendTelegramMessage(telegramMessage);
+        // Отправить сообщение каждому пользователю из массива ids
+        for (const id of ids) {
+            await sendTelegramMessage(telegramMessage, id);
+        }
 
-        // Відповісти успішним статусом
-        res.status(200).send('Дані успішно відправлено у бота Telegram!');
+        // Ответить успешным статусом
+        res.status(200).send('Данные успешно отправлены в бота Telegram!');
     } catch (error) {
-        console.error('Помилка при обробці запиту:', error);
-        // Відповісти статусом помилки
-        res.status(500).send('Сталася помилка при обробці запиту.');
+        console.error('Ошибка при обработке запроса:', error);
+        // Ответить статусом ошибки
+        res.status(500).send('Произошла ошибка при обработке запроса.');
     }
 });
 
-// Функція для відправки повідомлення у чат Telegram
-async function sendTelegramMessage(message) {
+async function sendTelegramMessage(message, chatId) {
     try {
         const response = await fetch(telegramApiUrl, {
             method: 'POST',
