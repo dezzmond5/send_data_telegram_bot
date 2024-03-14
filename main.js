@@ -15,8 +15,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors())
 
 // URL-адреса сервера Telegram Bot API
-// const botToken = process.env.TELEGRAM_TOKEN;
-const botToken = '7185321685:AAFe_vIWeRI5mJsJeaLg4nAsISnGD1R-fR8';
+const botToken = process.env.TELEGRAM_TOKEN;
+// const botToken = '7185321685:AAFe_vIWeRI5mJsJeaLg4nAsISnGD1R-fR8';
 
 // const chatId = '319872388';
 // 694984992
